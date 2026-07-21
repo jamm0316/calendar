@@ -446,6 +446,39 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
     });
   }
 
+  /* ── 안드로이드: 네이티브 설치 프롬프트 확보 ── */
+  var deferredInstall=null;
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault();          /* 브라우저 기본 배너 억제, 버튼으로 직접 호출 */
+    deferredInstall=e;
+    reflectInstall();            /* 모달이 이미 열려 있으면 설치 버튼 노출 */
+  });
+  window.addEventListener('appinstalled',function(){
+    deferredInstall=null;
+    try{ localStorage.setItem('a2hsSeen','1'); }catch(e){}
+    var bg=document.querySelector('.a2hs-bg'); if(bg) bg.remove();
+  });
+  /* 열려 있는 안내 모달에 설치 버튼 상태를 반영 */
+  function reflectInstall(){
+    var btn=document.querySelector('#a2hsInstall');
+    var steps=document.querySelector('#a2hsSteps');
+    var hint=document.querySelector('#a2hsManualHint');
+    if(btn && deferredInstall){
+      btn.style.display='';
+      if(steps) steps.style.display='none';
+      if(hint) hint.style.display='';
+    }
+  }
+  function doInstall(){
+    if(!deferredInstall) return;
+    deferredInstall.prompt();
+    deferredInstall.userChoice.then(function(res){
+      if(res && res.outcome==='accepted'){ try{ localStorage.setItem('a2hsSeen','1'); }catch(e){} }
+      deferredInstall=null;
+      var bg=document.querySelector('.a2hs-bg'); if(bg) bg.remove();
+    });
+  }
+
   /* ── 홈 화면 추가 방법 안내 (최초 1번만) ── */
   function maybeShowA2HS(){
     /* 이미 앱으로 설치되어 실행 중이면 표시 안 함 */
@@ -496,14 +529,18 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
         '<div class="ic">🐾</div>'+
         '<h3>홈 화면에 추가하기</h3>'+
         '<div class="sub">홈 화면에 추가하면 앱처럼 더 빠르고 편하게 일정을 열 수 있어요</div>'+
-        '<ol>'+lis+'</ol>'+
+        /* 안드로이드에서 설치 프롬프트가 준비되면 이 버튼이 노출됨 (원탭 설치) */
+        '<button class="closebtn" id="a2hsInstall" style="display:none">홈 화면에 추가하기</button>'+
+        '<div class="note2" id="a2hsManualHint" style="display:none">버튼이 안 되면 아래 방법으로도 추가할 수 있어요</div>'+
+        '<ol id="a2hsSteps">'+lis+'</ol>'+
         '<div class="note2">앱 제목은 <b>애견미용 일정</b>으로 자동 입력돼요 ✨</div>'+
-        '<button class="closebtn" id="a2hsClose">알겠어요</button>'+
+        '<button class="closebtn ghost" id="a2hsClose">알겠어요</button>'+
       '</div>';
     }
 
     bg.innerHTML=inner;
     document.body.appendChild(bg);
+    reflectInstall();  /* 이미 설치 프롬프트가 확보돼 있으면 즉시 버튼 노출 */
 
     function close(){
       if(!inApp){ try{ localStorage.setItem('a2hsSeen','1'); }catch(e){} }
@@ -516,6 +553,8 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
         location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(location.href);
       };
     }
+    var installBtn=bg.querySelector('#a2hsInstall');
+    if(installBtn){ installBtn.onclick=doInstall; }
     bg.querySelector('#a2hsClose').onclick=close;
     bg.onclick=function(e){ if(e.target===bg) close(); };
   }
