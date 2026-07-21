@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>소영 애견미용 훈련 일정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4efe8; --ink:#4b403a; --sub:#a2938a; --line:#e9ded4;
+    --card:#fffdfa;
+    --rose:#bd8a86; --rose-deep:#9f6d6a; --rose-soft:#f4e5e1;
+    --cocoa:#7c6558; --cocoa-soft:#eee4db;
+    --caramel:#c19566; --caramel-soft:#f4e9da;
+    --olive:#9d9468; --olive-soft:#eeead9;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;color:var(--ink);
+    background:
+      radial-gradient(120% 60% at 100% 0%, #f8f0e6 0%, rgba(248,240,230,0) 55%),
+      radial-gradient(120% 60% at 0% 0%, #f3e9e6 0%, rgba(243,233,230,0) 50%),
+      var(--bg);
+    background-attachment:fixed;line-height:1.4;
+  }
+  .wrap{max-width:940px;margin:0 auto;padding:0 16px 90px;}
+
+  /* ── 헤더 ── */
+  header{padding:30px 4px 18px;text-align:center;}
+  .eyebrow{font-size:11px;letter-spacing:4px;color:var(--rose);font-weight:700;
+            text-transform:uppercase;margin-bottom:10px;
+            display:flex;align-items:center;justify-content:center;gap:8px;}
+  .eyebrow .line{width:26px;height:1px;background:var(--rose);opacity:.55;}
+  .title{font-family:'Gowun Batang','Nanum Myeongjo',serif;font-weight:700;
+          font-size:30px;color:var(--ink);margin:0;letter-spacing:1px;line-height:1.25;}
+  .title .amp{color:var(--rose);font-weight:400;margin:0 6px;}
+  .range{margin-top:12px;font-size:13px;color:var(--sub);letter-spacing:.5px;}
+  .divider{display:flex;align-items:center;justify-content:center;gap:12px;
+            margin:20px auto 4px;max-width:340px;color:var(--rose);}
+  .divider .d{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);}
+  .scis{width:22px;height:22px;color:var(--rose);}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px;}
+  .chip{font-size:12px;padding:6px 14px;border-radius:40px;background:var(--card);
+         border:1px solid var(--line);color:var(--sub);letter-spacing:.3px;
+         box-shadow:0 1px 2px rgba(120,95,80,.04);}
+  .chip b{color:var(--rose-deep);font-weight:700;}
+
+  /* ── 월 섹션 ── */
+  .month{margin-top:30px;}
+  .mhead{display:flex;align-items:center;gap:11px;padding:8px 6px;margin:0 -2px;
+          cursor:pointer;border-radius:12px;user-select:none;
+          transition:background .15s ease;}
+  .mhead:hover{background:rgba(189,138,134,.07);}
+  .mhead:focus-visible{outline:2px solid var(--rose);outline-offset:2px;}
+  .paw{width:22px;height:22px;color:var(--rose);flex-shrink:0;}
+  .mhead h2{font-family:'Gowun Batang',serif;font-weight:700;font-size:23px;
+             color:var(--ink);margin:0;letter-spacing:1px;}
+  .mhead h2 span{font-size:15px;color:var(--sub);margin-left:2px;
+                  font-family:'Pretendard',sans-serif;font-weight:600;}
+  .mhead .rule{flex:1;height:1px;background:var(--line);}
+  .mcount{font-size:11px;letter-spacing:2px;text-transform:uppercase;
+           color:var(--rose);font-weight:700;}
+  .chev{width:20px;height:20px;color:var(--rose);flex-shrink:0;
+         transition:transform .3s ease;}
+  .month.collapsed .chev{transform:rotate(-90deg);}
+
+  /* ── 그리드 + 접힘 애니메이션 ── */
+  .grid{display:grid;grid-template-columns:1fr;gap:12px;
+         overflow:hidden;transition:max-height .34s ease, opacity .26s ease;
+         padding-top:14px;}
+  @media (min-width:440px){ .grid{grid-template-columns:repeat(2,1fr);} }
+  @media (min-width:720px){ .grid{grid-template-columns:repeat(3,1fr);} }
+
+  .card{position:relative;background:var(--card);border:1px solid var(--line);
+         border-radius:18px;padding:16px 18px 15px;overflow:hidden;
+         box-shadow:0 2px 10px rgba(120,90,72,.05);
+         transition:transform .18s ease, box-shadow .18s ease, border-color .2s ease;}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+                 background:linear-gradient(var(--rose),var(--caramel));opacity:.5;}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(120,90,72,.1);}
+
+  .chead{display:flex;align-items:center;justify-content:space-between;
+          padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line);}
+  .dwrap{display:flex;align-items:center;gap:11px;}
+  .wd{width:30px;height:30px;border-radius:50%;flex-shrink:0;
+       display:inline-flex;align-items:center;justify-content:center;
+       font-size:13px;font-weight:800;background:var(--cocoa-soft);color:var(--cocoa);}
+  .wd-토,.wd-일{background:var(--rose-soft);color:var(--rose-deep);}
+  .mmdd{font-family:'Gowun Batang',serif;font-weight:700;font-size:21px;
+         color:var(--ink);letter-spacing:.5px;line-height:1;}
+  .badge{font-size:12px;font-weight:800;padding:5px 11px;border-radius:40px;
+          letter-spacing:.5px;white-space:nowrap;}
+  .badge.h7{color:var(--rose-deep);background:var(--rose-soft);}
+  .badge.h4{color:#a5763f;background:var(--caramel-soft);}
+  .badge.h3{color:#7d7538;background:var(--olive-soft);}
+  .rows{display:flex;flex-direction:column;gap:8px;}
+  .row{display:flex;align-items:center;gap:11px;}
+  .lab{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--rose-deep);min-width:30px;}
+  .lab.alt{color:var(--sub);}
+  .val{font-size:15px;color:var(--ink);letter-spacing:.4px;font-variant-numeric:tabular-nums;}
+  .val.muted{color:#cbc0b8;letter-spacing:0;}
+
+  .card.special::before{opacity:1;background:var(--rose);width:5px;}
+  .card.special{background:linear-gradient(180deg,#fdf3f0,#fffdfa 60%);border-color:#eccfc9;}
+  .card.special .mmdd{color:var(--rose-deep);}
+
+  /* ── 오늘 강조 ── */
+  .todaytag{position:absolute;top:0;right:0;
+             font-size:10px;font-weight:800;letter-spacing:1px;color:#fff;
+             background:var(--rose);padding:3px 10px;border-bottom-left-radius:12px;
+             display:none;}
+  .card.is-today{border-color:var(--rose);box-shadow:0 0 0 2px var(--rose-soft),0 10px 26px rgba(159,109,106,.18);}
+  .card.is-today .todaytag{display:block;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(189,138,134,.5),0 10px 26px rgba(159,109,106,.18);}
+                   100%{box-shadow:0 0 0 14px rgba(189,138,134,0),0 10px 26px rgba(159,109,106,.18);}}
+  .card.pulse{animation:pulse .9s ease-out 1;}
+
+  /* ── 플로팅 오늘 버튼 ── */
+  .todaybtn{position:fixed;left:50%;transform:translateX(-50%);
+             bottom:calc(20px + env(safe-area-inset-bottom));z-index:30;
+             display:inline-flex;align-items:center;gap:8px;
+             font-family:'Pretendard',sans-serif;font-size:14px;font-weight:700;
+             letter-spacing:.5px;color:#fff;
+             background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+             border:none;border-radius:40px;padding:12px 22px;cursor:pointer;
+             box-shadow:0 8px 22px rgba(159,109,106,.36);
+             transition:transform .16s ease, box-shadow .16s ease, opacity .2s ease;}
+  .todaybtn:hover{transform:translateX(-50%) translateY(-2px);
+                   box-shadow:0 12px 28px rgba(159,109,106,.44);}
+  .todaybtn:active{transform:translateX(-50%) translateY(0);}
+  .todaybtn .paw{width:18px;height:18px;color:#fff;}
+
+  footer{text-align:center;margin-top:34px;color:var(--sub);}
+  footer .fscis{color:var(--rose);width:20px;height:20px;}
+  footer .msg{font-family:'Gowun Batang',serif;font-size:14px;letter-spacing:1px;margin-top:6px;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow"><span class="line"></span>Grooming · Training<span class="line"></span></div>
+      <h1 class="title">소영<span class="amp">&</span>애견미용 훈련 일정</h1>
+      <div class="range">2026. 07. 22 — 10. 14 · 평일 훈련</div>
+      <div class="divider"><span class="d"></span><svg class="scis" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/>
+<line x1="20" y1="4" x2="8.1" y2="14.5"/><line x1="14.5" y1="12.6" x2="20" y2="20"/>
+<line x1="8.1" y1="9.5" x2="12" y2="12.5"/></svg><span class="d"></span></div>
+      <div class="chips">
+        <span class="chip">총 <b>54일</b></span>
+        <span class="chip">기본 <b>10:00–18:00</b></span>
+        <span class="chip">점심 <b>14:00–15:00</b></span>
+      </div>
+    </header>
+
+<section class="month" data-month="7"><div class="mhead" role="button" tabindex="0" aria-expanded="true"><svg class="paw" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor">
+<ellipse cx="12" cy="15.5" rx="4.3" ry="3.4"/>
+<ellipse cx="6.4" cy="10.6" rx="1.7" ry="2.3"/>
+<ellipse cx="10" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="14" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="17.6" cy="10.6" rx="1.7" ry="2.3"/></g></svg><h2>7<span>월</span></h2><span class="rule"></span><span class="mcount">7 days</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/></svg></div><div class="grid"><article class="card" data-date="2026-07-22"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">7.22</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-07-23"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">7.23</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-07-24"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-금">금</span><span class="mmdd">7.24</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-07-27"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">7.27</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-07-28"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">7.28</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-07-29"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">7.29</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-07-30"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">7.30</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article></div></section>
+<section class="month" data-month="8"><div class="mhead" role="button" tabindex="0" aria-expanded="true"><svg class="paw" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor">
+<ellipse cx="12" cy="15.5" rx="4.3" ry="3.4"/>
+<ellipse cx="6.4" cy="10.6" rx="1.7" ry="2.3"/>
+<ellipse cx="10" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="14" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="17.6" cy="10.6" rx="1.7" ry="2.3"/></g></svg><h2>8<span>월</span></h2><span class="rule"></span><span class="mcount">19 days</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/></svg></div><div class="grid"><article class="card" data-date="2026-08-03"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">8.3</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-04"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">8.4</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-05"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">8.5</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-06"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">8.6</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-07"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-금">금</span><span class="mmdd">8.7</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-10"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">8.10</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-11"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">8.11</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-12"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">8.12</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-13"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">8.13</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-14"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-금">금</span><span class="mmdd">8.14</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-18"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">8.18</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-19"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">8.19</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-20"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">8.20</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-21"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-금">금</span><span class="mmdd">8.21</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-24"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">8.24</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-25"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">8.25</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-26"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">8.26</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-27"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">8.27</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-08-31"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">8.31</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article></div></section>
+<section class="month" data-month="9"><div class="mhead" role="button" tabindex="0" aria-expanded="true"><svg class="paw" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor">
+<ellipse cx="12" cy="15.5" rx="4.3" ry="3.4"/>
+<ellipse cx="6.4" cy="10.6" rx="1.7" ry="2.3"/>
+<ellipse cx="10" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="14" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="17.6" cy="10.6" rx="1.7" ry="2.3"/></g></svg><h2>9<span>월</span></h2><span class="rule"></span><span class="mcount">20 days</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/></svg></div><div class="grid"><article class="card" data-date="2026-09-01"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">9.1</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-02"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">9.2</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-03"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">9.3</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-04"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-금">금</span><span class="mmdd">9.4</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card special" data-date="2026-09-07"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">9.7</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-08"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">9.8</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-09"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">9.9</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-10"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">9.10</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-11"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-금">금</span><span class="mmdd">9.11</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-14"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">9.14</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-15"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">9.15</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-16"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">9.16</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-17"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">9.17</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-18"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-금">금</span><span class="mmdd">9.18</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-21"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">9.21</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-22"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">9.22</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-23"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">9.23</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-28"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">9.28</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-29"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">9.29</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-09-30"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">9.30</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article></div></section>
+<section class="month" data-month="10"><div class="mhead" role="button" tabindex="0" aria-expanded="true"><svg class="paw" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor">
+<ellipse cx="12" cy="15.5" rx="4.3" ry="3.4"/>
+<ellipse cx="6.4" cy="10.6" rx="1.7" ry="2.3"/>
+<ellipse cx="10" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="14" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="17.6" cy="10.6" rx="1.7" ry="2.3"/></g></svg><h2>10<span>월</span></h2><span class="rule"></span><span class="mcount">8 days</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/></svg></div><div class="grid"><article class="card" data-date="2026-10-01"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">10.1</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-10-02"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-금">금</span><span class="mmdd">10.2</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-10-06"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">10.6</span></div><span class="badge h7">7h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 18:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val">14:00 – 15:00</span></div></div></article><article class="card" data-date="2026-10-07"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">10.7</span></div><span class="badge h4">4h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 14:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val muted">–</span></div></div></article><article class="card" data-date="2026-10-08"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-목">목</span><span class="mmdd">10.8</span></div><span class="badge h4">4h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 14:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val muted">–</span></div></div></article><article class="card" data-date="2026-10-12"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-월">월</span><span class="mmdd">10.12</span></div><span class="badge h3">3h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 13:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val muted">–</span></div></div></article><article class="card" data-date="2026-10-13"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-화">화</span><span class="mmdd">10.13</span></div><span class="badge h3">3h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 13:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val muted">–</span></div></div></article><article class="card" data-date="2026-10-14"><span class="todaytag">오늘</span><div class="chead"><div class="dwrap"><span class="wd wd-수">수</span><span class="mmdd">10.14</span></div><span class="badge h3">3h</span></div><div class="rows"><div class="row"><span class="lab">훈련</span><span class="val">10:00 – 13:00</span></div><div class="row"><span class="lab alt">점심</span><span class="val muted">–</span></div></div></article></div></section>
+
+    <footer>
+      <svg class="scis fscis" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/>
+<line x1="20" y1="4" x2="8.1" y2="14.5"/><line x1="14.5" y1="12.6" x2="20" y2="20"/>
+<line x1="8.1" y1="9.5" x2="12" y2="12.5"/></svg>
+      <div class="msg">소영이 화이팅 ♡</div>
+    </footer>
+  </div>
+
+  <button class="todaybtn" id="todayBtn" type="button">
+    <svg class="paw" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor">
+<ellipse cx="12" cy="15.5" rx="4.3" ry="3.4"/>
+<ellipse cx="6.4" cy="10.6" rx="1.7" ry="2.3"/>
+<ellipse cx="10" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="14" cy="8.2" rx="1.7" ry="2.4"/>
+<ellipse cx="17.6" cy="10.6" rx="1.7" ry="2.3"/></g></svg><span id="todayLabel">오늘로 이동</span>
+  </button>
+
+<script>
+(function(){
+  /* 월 토글 */
+  document.querySelectorAll('.month').forEach(function(sec){
+    var head=sec.querySelector('.mhead');
+    var grid=sec.querySelector('.grid');
+    function setOpen(open,animate){
+      sec.classList.toggle('collapsed',!open);
+      head.setAttribute('aria-expanded',String(open));
+      if(!animate){ grid.style.maxHeight=open?'none':'0px'; grid.style.opacity=open?'1':'0'; return; }
+      if(open){
+        grid.style.maxHeight=grid.scrollHeight+'px'; grid.style.opacity='1';
+        grid.addEventListener('transitionend',function te(e){
+          if(e.propertyName==='max-height'){ grid.style.maxHeight='none'; grid.removeEventListener('transitionend',te); }
+        });
+      } else {
+        grid.style.maxHeight=grid.scrollHeight+'px';
+        requestAnimationFrame(function(){ grid.style.maxHeight='0px'; grid.style.opacity='0'; });
+      }
+    }
+    sec._setOpen=setOpen;
+    head.addEventListener('click',function(){ setOpen(sec.classList.contains('collapsed'),true); });
+    head.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setOpen(sec.classList.contains('collapsed'),true); }
+    });
+  });
+
+  /* 오늘(또는 다음 훈련일)로 이동 */
+  function iso(d){
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  var cards=Array.prototype.slice.call(document.querySelectorAll('.card[data-date]'));
+  var btn=document.getElementById('todayBtn');
+  var label=document.getElementById('todayLabel');
+
+  function pick(){
+    var t=iso(new Date());
+    var exact=null,next=null;
+    for(var i=0;i<cards.length;i++){
+      var dt=cards[i].dataset.date;
+      if(dt===t){ exact=cards[i]; break; }
+      if(!next && dt>t){ next=cards[i]; }
+    }
+    if(exact) return {card:exact,mode:'today'};
+    if(next)  return {card:next,mode:'next'};
+    return {card:cards[cards.length-1],mode:'past'};
+  }
+  /* 버튼 라벨을 상태에 맞게 */
+  (function(){
+    var m=pick().mode;
+    label.textContent = m==='today' ? '오늘로 이동' : (m==='next' ? '다음 훈련일로' : '마지막 일정으로');
+  })();
+
+  function focusToday(){
+    var r=pick();
+    /* 이전 강조 제거 */
+    cards.forEach(function(c){ c.classList.remove('is-today','next','pulse'); c.querySelector('.todaytag').textContent='오늘'; });
+    /* 대상 월 펼치기 */
+    var sec=r.card.closest('.month');
+    if(sec && sec.classList.contains('collapsed')){ sec._setOpen(true,false); }
+    var tag=r.card.querySelector('.todaytag');
+    r.card.classList.add('is-today');
+    if(r.mode!=='today'){ r.card.classList.add('next'); tag.textContent=(r.mode==='next'?'다음':'마지막'); }
+    r.card.scrollIntoView({behavior:'smooth',block:'center'});
+    /* 살짝 대기 후 펄스 */
+    setTimeout(function(){ r.card.classList.add('pulse'); },420);
+  }
+  btn.addEventListener('click',focusToday);
+})();
+</script>
+</body>
+</html>
