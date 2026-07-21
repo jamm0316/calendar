@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="소영 일정">
+<meta name="apple-mobile-web-app-title" content="애견미용 일정">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -215,6 +215,8 @@
   .memo-actions .save:active{transform:translateY(1px);}
   .memo-actions .del{color:var(--rose-deep);background:var(--rose-soft);border:1px solid #eccfc9;}
   .memo-actions .del:active{transform:translateY(1px);}
+  .memo-actions .cancel{color:var(--sub);background:var(--bg);border:1px solid var(--line);}
+  .memo-actions .cancel:active{transform:translateY(1px);}
   .memo-card .saved{text-align:center;font-size:12px;color:var(--sub);margin-top:10px;min-height:15px;}
 </style>
 </head>
@@ -398,6 +400,7 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
       '<textarea placeholder="이 날의 메모를 남겨보세요 (예: 예방접종, 특이사항, 준비물…)"></textarea>'+
       '<div class="memo-actions">'+
         '<button type="button" class="del">삭제</button>'+
+        '<button type="button" class="cancel">닫기</button>'+
         '<button type="button" class="save">저장</button>'+
       '</div>'+
       '<div class="saved"></div>'+
@@ -413,6 +416,7 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
     setTimeout(function(){ ta.focus(); },250);
 
     function close(){ bg.remove(); }
+    bg.querySelector('.cancel').onclick=close;
     bg.querySelector('.save').onclick=function(){
       memoSet(d,ta.value);
       renderCardMemo(card);
@@ -462,7 +466,7 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
       '<h3>홈 화면에 추가하기</h3>'+
       '<div class="sub">홈 화면에 추가하면 앱처럼 더 빠르고 편하게 일정을 열 수 있어요</div>'+
       '<ol>'+lis+'</ol>'+
-      '<div class="note2">앱 제목은 <b>소영 일정</b>으로 자동 입력돼요 ✨</div>'+
+      '<div class="note2">앱 제목은 <b>애견미용 일정</b>으로 자동 입력돼요 ✨</div>'+
       '<button class="closebtn" id="a2hsClose">알겠어요</button>'+
     '</div>';
     document.body.appendChild(bg);
