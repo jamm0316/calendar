@@ -532,7 +532,7 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
       /* 실제 브라우저 → 홈 화면 추가 단계 안내 */
       var isIOS=/iP(hone|ad|od)/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
       var steps=isIOS
-        ? ['하단 <b>공유 버튼</b>(□↑) 탭하기','메뉴에서 <b>\'홈 화면에 추가\'</b> 선택','오른쪽 위 <b>\'추가\'</b> 탭 — 끝!']
+        ? ['주소창 오른쪽 <b>공유 버튼</b>(□↑) 탭하기','메뉴에서 <b>\'홈 화면에 추가\'</b> 선택','오른쪽 위 <b>\'추가\'</b> 탭 — 끝!']
         : ['오른쪽 위 <b>⋮ 메뉴</b> 탭하기','<b>\'홈 화면에 추가\'</b>(앱 설치) 선택','<b>\'추가\'</b> 버튼 탭 — 끝!'];
       var lis=steps.map(function(s,i){
         return '<li><span class="n">'+(i+1)+'</span><span class="t">'+s+'</span></li>';
