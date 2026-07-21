@@ -112,6 +112,19 @@
   .val{font-size:15px;color:var(--ink);letter-spacing:.4px;font-variant-numeric:tabular-nums;}
   .val.muted{color:#cbc0b8;letter-spacing:0;}
 
+  /* ── 카드 메모 ── */
+  .card{cursor:pointer;}
+  .cmemo{display:flex;align-items:flex-start;gap:7px;margin-top:12px;padding:9px 11px;
+          background:var(--olive-soft);border:1px solid #e4dcc2;border-radius:12px;}
+  .cmemo .mp{font-size:13px;flex-shrink:0;line-height:1.5;}
+  .cmemo .mt{font-size:13px;color:var(--cocoa);line-height:1.5;white-space:pre-wrap;
+              display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .card.has-memo::before{opacity:1;background:linear-gradient(var(--olive),var(--caramel));}
+  .memohint{position:absolute;bottom:9px;right:12px;font-size:11px;color:#cdbfa0;
+             letter-spacing:.3px;opacity:0;transition:opacity .18s ease;pointer-events:none;}
+  .card:hover .memohint{opacity:1;}
+  .card.has-memo .memohint{display:none;}
+
   .card.special::before{opacity:1;background:var(--rose);width:5px;}
   .card.special{background:linear-gradient(180deg,#fdf3f0,#fffdfa 60%);border-color:#eccfc9;}
   .card.special .mmdd{color:var(--rose-deep);}
@@ -173,6 +186,36 @@
                   color:#fff;background:linear-gradient(135deg,var(--rose),var(--rose-deep));
                   box-shadow:0 8px 20px rgba(159,109,106,.34);}
   .a2hs .closebtn:active{transform:translateY(1px);}
+
+  /* ── 메모 편집 모달 ── */
+  .memo-bg{position:fixed;inset:0;background:rgba(75,64,58,.5);backdrop-filter:blur(4px);z-index:95;
+           display:flex;align-items:flex-end;justify-content:center;padding:0;
+           animation:a2hsFade .22s ease;}
+  @media (min-width:520px){ .memo-bg{align-items:center;padding:20px;} }
+  .memo-card{width:100%;max-width:480px;background:var(--card);
+             border:1px solid var(--line);border-radius:22px 22px 0 0;
+             padding:22px 20px calc(20px + env(safe-area-inset-bottom));
+             box-shadow:0 -14px 40px rgba(120,90,72,.24);
+             animation:memoUp .28s cubic-bezier(.2,.9,.3,1.1);}
+  @media (min-width:520px){ .memo-card{border-radius:22px;animation:a2hsPop .28s cubic-bezier(.2,.9,.3,1.2);} }
+  @keyframes memoUp{from{transform:translateY(40px);opacity:.4;}to{transform:none;opacity:1;}}
+  .memo-card .mh{display:flex;align-items:center;gap:9px;margin-bottom:14px;}
+  .memo-card .mh .pico{font-size:20px;}
+  .memo-card h3{font-family:'Gowun Batang',serif;font-size:20px;margin:0;color:var(--ink);letter-spacing:.5px;}
+  .memo-card textarea{width:100%;min-height:130px;resize:vertical;box-sizing:border-box;
+             font-family:'Pretendard',sans-serif;font-size:15px;line-height:1.6;color:var(--ink);
+             background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:13px 14px;}
+  .memo-card textarea:focus{outline:none;border-color:var(--rose);box-shadow:0 0 0 3px var(--rose-soft);}
+  .memo-card textarea::placeholder{color:#c3b7ad;}
+  .memo-actions{display:flex;gap:9px;margin-top:14px;}
+  .memo-actions button{border:none;border-radius:13px;padding:13px 16px;cursor:pointer;
+             font-family:'Pretendard',sans-serif;font-size:15px;font-weight:700;letter-spacing:.4px;}
+  .memo-actions .save{flex:1;color:#fff;background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+             box-shadow:0 8px 20px rgba(159,109,106,.32);}
+  .memo-actions .save:active{transform:translateY(1px);}
+  .memo-actions .del{color:var(--rose-deep);background:var(--rose-soft);border:1px solid #eccfc9;}
+  .memo-actions .del:active{transform:translateY(1px);}
+  .memo-card .saved{text-align:center;font-size:12px;color:var(--sub);margin-top:10px;min-height:15px;}
 </style>
 </head>
 <body>
@@ -313,6 +356,82 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
     setTimeout(function(){ r.card.classList.add('pulse'); },420);
   }
   btn.addEventListener('click',focusToday);
+
+  /* ── 날짜별 개인 메모 (localStorage, 이 폰에만 저장) ── */
+  var MEMO_KEY='memo:';
+  function memoGet(d){ try{ return localStorage.getItem(MEMO_KEY+d)||''; }catch(e){ return ''; } }
+  function memoSet(d,v){
+    try{ v=v.trim(); if(v){ localStorage.setItem(MEMO_KEY+d,v); } else { localStorage.removeItem(MEMO_KEY+d); } }catch(e){}
+  }
+  function renderCardMemo(card){
+    var v=memoGet(card.dataset.date);
+    var el=card.querySelector('.cmemo');
+    if(v){
+      if(!el){
+        el=document.createElement('div'); el.className='cmemo';
+        el.innerHTML='<span class="mp">📝</span><span class="mt"></span>';
+        card.appendChild(el);
+      }
+      el.querySelector('.mt').textContent=v;
+      card.classList.add('has-memo');
+    } else {
+      if(el) el.remove();
+      card.classList.remove('has-memo');
+    }
+  }
+  cards.forEach(function(card){
+    renderCardMemo(card);
+    /* 호버 힌트 */
+    var hint=document.createElement('span'); hint.className='memohint'; hint.textContent='탭하여 메모 ✎';
+    card.appendChild(hint);
+  });
+
+  function openMemo(card){
+    var d=card.dataset.date;
+    var wd=card.querySelector('.wd').textContent;
+    var mmdd=card.querySelector('.mmdd').textContent.split('.');
+    var title=mmdd[0]+'월 '+mmdd[1]+'일 ('+wd+')';
+
+    var bg=document.createElement('div'); bg.className='memo-bg';
+    bg.innerHTML='<div class="memo-card">'+
+      '<div class="mh"><span class="pico">🐾</span><h3></h3></div>'+
+      '<textarea placeholder="이 날의 메모를 남겨보세요 (예: 예방접종, 특이사항, 준비물…)"></textarea>'+
+      '<div class="memo-actions">'+
+        '<button type="button" class="del">삭제</button>'+
+        '<button type="button" class="save">저장</button>'+
+      '</div>'+
+      '<div class="saved"></div>'+
+    '</div>';
+    bg.querySelector('h3').textContent=title;
+    var ta=bg.querySelector('textarea');
+    var delBtn=bg.querySelector('.del');
+    var savedMsg=bg.querySelector('.saved');
+    var original=memoGet(d);
+    ta.value=original;
+    if(!original) delBtn.style.display='none';
+    document.body.appendChild(bg);
+    setTimeout(function(){ ta.focus(); },250);
+
+    function close(){ bg.remove(); }
+    bg.querySelector('.save').onclick=function(){
+      memoSet(d,ta.value);
+      renderCardMemo(card);
+      savedMsg.textContent='저장했어요 ✓';
+      setTimeout(close,450);
+    };
+    delBtn.onclick=function(){
+      memoSet(d,'');
+      renderCardMemo(card);
+      close();
+    };
+    bg.onclick=function(e){ if(e.target===bg) close(); };
+    document.addEventListener('keydown',function esc(e){
+      if(e.key==='Escape'){ close(); document.removeEventListener('keydown',esc); }
+    });
+  }
+  cards.forEach(function(card){
+    card.addEventListener('click',function(){ openMemo(card); });
+  });
 
   /* ── 서비스워커 등록 (PWA) ── */
   if('serviceWorker' in navigator){
