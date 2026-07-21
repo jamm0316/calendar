@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'soyoung-cal-v3';
+const CACHE_VERSION = 'soyoung-cal-v4';
 const PRECACHE = ['./', 'index.html', 'manifest.json',
   'assets/icons/icon-192.png', 'assets/icons/icon-512.png'];
 

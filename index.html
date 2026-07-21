@@ -186,6 +186,8 @@
                   color:#fff;background:linear-gradient(135deg,var(--rose),var(--rose-deep));
                   box-shadow:0 8px 20px rgba(159,109,106,.34);}
   .a2hs .closebtn:active{transform:translateY(1px);}
+  .a2hs .closebtn.ghost{margin-top:10px;color:var(--sub);background:var(--bg);
+                        border:1px solid var(--line);box-shadow:none;font-weight:600;}
 
   /* ── 메모 편집 모달 ── */
   .memo-bg{position:fixed;inset:0;background:rgba(75,64,58,.5);backdrop-filter:blur(4px);z-index:95;
@@ -449,30 +451,70 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
     /* 이미 앱으로 설치되어 실행 중이면 표시 안 함 */
     var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;
     if(standalone) return;
-    /* 이미 한 번 봤으면 다시 표시 안 함 */
-    try{ if(localStorage.getItem('a2hsSeen')==='1') return; }catch(e){}
 
-    var isIOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-    var steps=isIOS
-      ? ['하단 <b>공유 버튼</b>(□↑) 탭하기','메뉴에서 <b>\'홈 화면에 추가\'</b> 선택','오른쪽 위 <b>\'추가\'</b> 탭 — 끝!']
-      : ['오른쪽 위 <b>⋮ 메뉴</b> 탭하기','<b>\'홈 화면에 추가\'</b>(앱 설치) 선택','<b>\'추가\'</b> 버튼 탭 — 끝!'];
-    var lis=steps.map(function(s,i){
-      return '<li><span class="n">'+(i+1)+'</span><span class="t">'+s+'</span></li>';
-    }).join('');
+    var ua=navigator.userAgent;
+    var inKakao=/KAKAOTALK/i.test(ua);
+    /* 카카오톡·기타 인앱 브라우저 감지 (홈 화면 추가 불가 → 외부 브라우저 필요) */
+    var inApp=inKakao||/(NAVER\(inapp|DaumApps|Instagram|FBAN|FBAV|FB_IAB|Line\/)/i.test(ua);
+
+    /* 실제 브라우저에서는 한 번만, 인앱 브라우저에서는 매번 안내(브라우저 전환 유도) */
+    if(!inApp){
+      try{ if(localStorage.getItem('a2hsSeen')==='1') return; }catch(e){}
+    }
 
     var bg=document.createElement('div'); bg.className='a2hs-bg';
-    bg.innerHTML='<div class="a2hs">'+
-      '<div class="ic">🐾</div>'+
-      '<h3>홈 화면에 추가하기</h3>'+
-      '<div class="sub">홈 화면에 추가하면 앱처럼 더 빠르고 편하게 일정을 열 수 있어요</div>'+
-      '<ol>'+lis+'</ol>'+
-      '<div class="note2">앱 제목은 <b>애견미용 일정</b>으로 자동 입력돼요 ✨</div>'+
-      '<button class="closebtn" id="a2hsClose">알겠어요</button>'+
-    '</div>';
+    var inner;
+
+    if(inKakao){
+      /* 카카오톡 인앱 브라우저 → 원탭으로 외부 브라우저 열기 */
+      inner='<div class="a2hs">'+
+        '<div class="ic">🌐</div>'+
+        '<h3>브라우저에서 열어주세요</h3>'+
+        '<div class="sub">카카오톡 안에서는 홈 화면에 추가할 수 없어요.<br>아래 버튼을 누르면 사파리·크롬으로 열려요.</div>'+
+        '<button class="closebtn" id="a2hsOpen">사파리·크롬에서 열기</button>'+
+        '<div class="note2">버튼이 안 되면 오른쪽 아래 <b>⋯ 메뉴</b> → <b>\'다른 브라우저로 열기\'</b>를 선택해 주세요</div>'+
+        '<button class="closebtn ghost" id="a2hsClose">나중에 할게요</button>'+
+      '</div>';
+    } else if(inApp){
+      /* 기타 인앱 브라우저 → 외부 브라우저로 열기 안내 */
+      inner='<div class="a2hs">'+
+        '<div class="ic">🌐</div>'+
+        '<h3>브라우저에서 열어주세요</h3>'+
+        '<div class="sub">지금 앱 안의 브라우저라 홈 화면에 추가할 수 없어요.<br>오른쪽 메뉴에서 <b>\'다른 브라우저로 열기\'</b>를 선택해 주세요.</div>'+
+        '<button class="closebtn" id="a2hsClose">알겠어요</button>'+
+      '</div>';
+    } else {
+      /* 실제 브라우저 → 홈 화면 추가 단계 안내 */
+      var isIOS=/iP(hone|ad|od)/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+      var steps=isIOS
+        ? ['하단 <b>공유 버튼</b>(□↑) 탭하기','메뉴에서 <b>\'홈 화면에 추가\'</b> 선택','오른쪽 위 <b>\'추가\'</b> 탭 — 끝!']
+        : ['오른쪽 위 <b>⋮ 메뉴</b> 탭하기','<b>\'홈 화면에 추가\'</b>(앱 설치) 선택','<b>\'추가\'</b> 버튼 탭 — 끝!'];
+      var lis=steps.map(function(s,i){
+        return '<li><span class="n">'+(i+1)+'</span><span class="t">'+s+'</span></li>';
+      }).join('');
+      inner='<div class="a2hs">'+
+        '<div class="ic">🐾</div>'+
+        '<h3>홈 화면에 추가하기</h3>'+
+        '<div class="sub">홈 화면에 추가하면 앱처럼 더 빠르고 편하게 일정을 열 수 있어요</div>'+
+        '<ol>'+lis+'</ol>'+
+        '<div class="note2">앱 제목은 <b>애견미용 일정</b>으로 자동 입력돼요 ✨</div>'+
+        '<button class="closebtn" id="a2hsClose">알겠어요</button>'+
+      '</div>';
+    }
+
+    bg.innerHTML=inner;
     document.body.appendChild(bg);
+
     function close(){
-      try{ localStorage.setItem('a2hsSeen','1'); }catch(e){}
+      if(!inApp){ try{ localStorage.setItem('a2hsSeen','1'); }catch(e){} }
       bg.remove();
+    }
+    var openBtn=bg.querySelector('#a2hsOpen');
+    if(openBtn){
+      openBtn.onclick=function(){
+        /* 카카오톡 → 외부 기본 브라우저로 현재 페이지 열기 */
+        location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(location.href);
+      };
     }
     bg.querySelector('#a2hsClose').onclick=close;
     bg.onclick=function(e){ if(e.target===bg) close(); };
