@@ -490,8 +490,20 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
     /* 카카오톡·기타 인앱 브라우저 감지 (홈 화면 추가 불가 → 외부 브라우저 필요) */
     var inApp=inKakao||/(NAVER\(inapp|DaumApps|Instagram|FBAN|FBAV|FB_IAB|Line\/)/i.test(ua);
 
-    /* 실제 브라우저에서는 한 번만, 인앱 브라우저에서는 매번 안내(브라우저 전환 유도) */
-    if(!inApp){
+    /* 카카오톡에서 '사파리·크롬에서 열기'로 넘어온 경우(?a2hs=1) → 안내창 강제 노출 */
+    var forced=/[?&]a2hs=1(?:&|$)/.test(location.search);
+    if(forced){
+      /* 새로고침 시 다시 강제되지 않도록 URL에서 마커 제거 */
+      if(window.history&&history.replaceState){
+        try{
+          var cleaned=location.href.replace(/[?&]a2hs=1\b/,'').replace(/\?$/,'');
+          history.replaceState(null,document.title,cleaned);
+        }catch(e){}
+      }
+    }
+
+    /* 실제 브라우저에서는 한 번만(단, 카카오에서 넘어온 경우는 매번), 인앱 브라우저에서는 매번 안내(브라우저 전환 유도) */
+    if(!inApp&&!forced){
       try{ if(localStorage.getItem('a2hsSeen')==='1') return; }catch(e){}
     }
 
@@ -549,8 +561,11 @@ stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin=
     var openBtn=bg.querySelector('#a2hsOpen');
     if(openBtn){
       openBtn.onclick=function(){
-        /* 카카오톡 → 외부 기본 브라우저로 현재 페이지 열기 */
-        location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(location.href);
+        /* 카카오톡 → 외부 기본 브라우저로 현재 페이지 열기.
+           ?a2hs=1 마커를 붙여 크롬에서 홈 화면 추가 안내창을 강제로 띄운다 */
+        var base=location.href.split('#')[0];
+        var ext=base+(base.indexOf('?')>-1?'&':'?')+'a2hs=1';
+        location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(ext);
       };
     }
     var installBtn=bg.querySelector('#a2hsInstall');
